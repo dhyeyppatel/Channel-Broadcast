@@ -12,10 +12,10 @@ if (user.telegramid !== admin_id) return;
 if (request.data) {
   Api.sendMessage({
     chat_id: user.telegramid,
-    text: "⏳ Step 1: Select your Source Channel:",
+    text: "Select your channel:",
     reply_markup: {
       keyboard: [[{
-        text: "📢 Choose Source Channel",
+        text: "📢 Choose Channel",
         request_chat: {
           request_id: 1,
           chat_is_channel: true
@@ -25,6 +25,11 @@ if (request.data) {
       one_time_keyboard: true
     }
   });
+  return;
+}
+
+if (message === "📢 Choose Channel") {
+  Bot.sendMessage("Your Telegram app does not support the Chat Picker. Please update your Telegram app, use the official mobile app, or simply forward a message from your Source Channel to me right now as a fallback.");
   return;
 }
 
@@ -56,4 +61,4 @@ if (request.forward_from_chat) {
   return;
 }
 
-Bot.sendMessage("❌ Please use the button to select a channel.");
+Bot.sendMessage("❌ Please use the button to select a channel, or forward a message from the channel.");
