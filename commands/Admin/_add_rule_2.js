@@ -1,29 +1,25 @@
 /*CMD
   command: /add_rule_2
   help: 
-  need_reply: false
+  need_reply: true
   auto_retry_time: 
   folder: Admin
+
+  <<ANSWER
+Step 2 of 3: Target Channel
+Forward any message from your Target Channel to me now.
+  ANSWER
 CMD*/
 
 let admin_id = Bot.getProperty("admin_id");
 if (user.telegramid !== admin_id) return;
 
-// Send the channel picker keyboard
-Bot.sendMessage("Step 2: Select your Target Channel:");
+if (request.forward_from_chat) {
+  let channel_id = request.forward_from_chat.id;
+  User.setProperty("temp_target", parseInt(channel_id), "integer");
+  Bot.sendMessage("Target saved!\nChannel ID: " + channel_id);
+  Bot.runCommand("/add_rule_3");
+  return;
+}
 
-Bot.makeRequest("sendMessage", {
-  chat_id: user.telegramid,
-  text: "Tap the button below to open the channel picker:",
-  reply_markup: JSON.stringify({
-    keyboard: [[{
-      text: "Choose Channel",
-      request_chat: {
-        request_id: 2,
-        chat_is_channel: true
-      }
-    }]],
-    resize_keyboard: true,
-    one_time_keyboard: true
-  })
-});
+Bot.sendMessage("Please forward a message from your Target Channel. Try again.");
