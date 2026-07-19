@@ -19,27 +19,35 @@ CMD*/
 let admin_id = Bot.getProperty("admin_id");
 if (user.telegramid !== admin_id) return;
 
-let source = Bot.getProperty("source_channel") || "Not Set";
-let target = Bot.getProperty("target_channel") || "Not Set";
 let autoDel = Bot.getProperty("autodelete_enabled") ? "ON" : "OFF";
 let autoDelTime = Bot.getProperty("autodelete_delay") || "Not Set";
 let isRunning = Bot.getProperty("is_running") ? "🟢 RUNNING" : "🔴 STOPPED";
-let startId = Bot.getProperty("current_message_id") || "Not Set";
+
+let rules = Bot.getProperty("rules") || [];
+let rulesText = "";
+
+if (rules.length === 0) {
+  rulesText = "No active rules.\n";
+} else {
+  for (let i = 0; i < rules.length; i++) {
+    let r = rules[i];
+    rulesText += `**Rule ${i+1}:**\n` +
+                 `  Source: \`${r.source}\`\n` +
+                 `  Target: \`${r.target}\`\n` +
+                 `  Next ID: \`${r.start_id}\`\n\n`;
+  }
+}
 
 let msg = `🎛 **Admin Panel**\n\n` +
-  `**Status:** ${isRunning}\n` +
-  `**Source Channel:** ${source}\n` +
-  `**Target Channel:** ${target}\n` +
-  `**Start Message ID:** ${startId}\n` +
-  `**Auto-Delete:** ${autoDel}\n` +
-  `**Auto-Delete Time:** ${autoDelTime}s\n\n` +
+  `**Engine Status:** ${isRunning}\n` +
+  `**Auto-Delete:** ${autoDel} (${autoDelTime}s)\n\n` +
+  `📜 **Forwarding Rules:**\n${rulesText}` +
   `Use the buttons below to configure the bot.`;
 
 let buttons = [
-  [{ title: "📥 Source", command: "/set_source" }, { title: "📤 Target", command: "/set_target" }],
-  [{ title: "🔢 Set Start Message ID", command: "/set_start_id" }],
+  [{ title: "➕ Add Rule", command: "/add_rule_1" }, { title: "🗑️ Remove Rule", command: "/remove_rule" }],
   [{ title: "🗑️ Toggle Auto-Delete", command: "/toggle_autodelete" }, { title: "⏱️ Set Time", command: "/set_time" }],
-  [{ title: "▶️ Run", command: "/run" }, { title: "⏸️ Pause", command: "/pause" }, { title: "⏹️ Stop", command: "/stop" }],
+  [{ title: "▶️ Run All", command: "/run" }, { title: "⏹️ Stop All", command: "/stop" }],
   [{ title: "❓ Help", command: "/help" }]
 ];
 
