@@ -4,6 +4,7 @@
   need_reply: true
   auto_retry_time: 
   folder: Admin
+  aliases: 🗑️ Remove Rule
 
   <<ANSWER
 ⏳ *Awaiting Response...*

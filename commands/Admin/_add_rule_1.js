@@ -4,18 +4,13 @@
   need_reply: true
   auto_retry_time: 
   folder: Admin
+  aliases: ➕ Add Rule
 CMD*/
 
 let admin_id = Bot.getProperty("admin_id");
 if (user.telegramid !== admin_id) return;
 
-if (request.data) {
-  Api.answerCallbackQuery({
-    callback_query_id: request.id,
-    text: "Awaiting your response...",
-    show_alert: false
-  });
-  
+if (message === "➕ Add Rule" || message === "/add_rule_1") {
   Api.sendMessage({
     chat_id: user.telegramid,
     text: "⏳ *Step 1: Source Channel*\nPlease select the Source Channel using the button below:",

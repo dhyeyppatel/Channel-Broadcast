@@ -44,11 +44,5 @@ let msg = `🎛 **Admin Panel**\n\n` +
   `📜 **Forwarding Rules:**\n${rulesText}` +
   `Use the buttons below to configure the bot.`;
 
-let buttons = [
-  [{ title: "➕ Add Rule", command: "/add_rule_1" }, { title: "🗑️ Remove Rule", command: "/remove_rule" }],
-  [{ title: "🗑️ Toggle Auto-Delete", command: "/toggle_autodelete" }, { title: "⏱️ Set Time", command: "/set_time" }],
-  [{ title: "▶️ Run All", command: "/run" }, { title: "⏹️ Stop All", command: "/stop" }],
-  [{ title: "❓ Help", command: "/help" }]
-];
-
-Bot.sendInlineKeyboard(buttons, msg);
+let keyboard = "➕ Add Rule, 🗑️ Remove Rule\n🗑️ Toggle Auto-Delete, ⏱️ Set Time\n▶️ Run All, ⏹️ Stop All\n❓ Help";
+Bot.sendKeyboard(keyboard, msg);
