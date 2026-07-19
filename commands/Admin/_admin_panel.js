@@ -44,5 +44,5 @@ let msg = `🎛 **Admin Panel**\n\n` +
   `📜 **Forwarding Rules:**\n${rulesText}` +
   `Use the buttons below to configure the bot.`;
 
-let keyboard = "➕ Add Rule, 🗑️ Remove Rule\n🗑️ Toggle Auto-Delete, ⏱️ Set Time\n▶️ Run All, ⏹️ Stop All\n❓ Help";
+let keyboard = "Add Rule, Remove Rule\nToggle Auto-Delete, Set Time\nRun All, Stop All\nHelp";
 Bot.sendKeyboard(keyboard, msg);

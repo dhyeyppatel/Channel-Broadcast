@@ -4,7 +4,7 @@
   need_reply: false
   auto_retry_time: 
   folder: Admin
-  aliases: ❓ Help
+  aliases: Help
 
   <<ANSWER
 

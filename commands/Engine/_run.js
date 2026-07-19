@@ -4,7 +4,7 @@
   need_reply: false
   auto_retry_time: 
   folder: Engine
-  aliases: ▶️ Run All
+  aliases: Run All
 CMD*/
 
 let admin_id = Bot.getProperty("admin_id");

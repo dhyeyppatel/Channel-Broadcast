@@ -4,7 +4,7 @@
   need_reply: false
   auto_retry_time: 
   folder: Admin
-  aliases: 🗑️ Toggle Auto-Delete
+  aliases: Toggle Auto-Delete
 
   <<ANSWER
 

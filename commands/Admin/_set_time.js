@@ -4,7 +4,7 @@
   need_reply: true
   auto_retry_time: 
   folder: Admin
-  aliases: ⏱️ Set Time
+  aliases: Set Time
 
   <<ANSWER
 ⏳ *Awaiting Response...*

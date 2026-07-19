@@ -4,20 +4,19 @@
   need_reply: true
   auto_retry_time: 
   folder: Admin
-  aliases: ➕ Add Rule
+  aliases: Add Rule
 CMD*/
 
 let admin_id = Bot.getProperty("admin_id");
 if (user.telegramid !== admin_id) return;
 
-if (message === "➕ Add Rule" || message === "/add_rule_1") {
+if (message === "Add Rule" || message === "/add_rule_1") {
   Api.sendMessage({
     chat_id: user.telegramid,
-    text: "⏳ *Step 1: Source Channel*\nPlease select the Source Channel using the button below:",
-    parse_mode: "Markdown",
+    text: "Step 1: Source Channel\nPlease select the Source Channel using the button below:",
     reply_markup: {
       keyboard: [[{
-        text: "📢 Select Source Channel",
+        text: "Select Source Channel",
         request_chat: { request_id: 1, chat_is_channel: true }
       }]],
       resize_keyboard: true,
@@ -36,7 +35,7 @@ if (shared) {
   User.setProperty("temp_rule_source", parseInt(shared.chat_id), "integer");
   Api.sendMessage({
     chat_id: user.telegramid,
-    text: "✅ Source saved.",
+    text: "Source saved.",
     reply_markup: { remove_keyboard: true }
   });
   Bot.runCommand("/add_rule_2");
@@ -48,7 +47,7 @@ if (!isNaN(num) && message && message.startsWith("-100")) {
   User.setProperty("temp_rule_source", num, "integer");
   Api.sendMessage({
     chat_id: user.telegramid,
-    text: "✅ Source saved.",
+    text: "Source saved.",
     reply_markup: { remove_keyboard: true }
   });
   Bot.runCommand("/add_rule_2");
@@ -61,7 +60,7 @@ if (request.forward_from_chat) {
   
   Api.sendMessage({
     chat_id: user.telegramid,
-    text: "✅ Source and Start ID captured from forward.",
+    text: "Source and Start ID captured from forward.",
     reply_markup: { remove_keyboard: true }
   });
   Bot.runCommand("/add_rule_2");
@@ -70,7 +69,7 @@ if (request.forward_from_chat) {
 
 Api.sendMessage({
   chat_id: user.telegramid,
-  text: "❌ Invalid input. Try again.",
+  text: "Invalid input. Try again.",
   reply_markup: { remove_keyboard: true }
 });
 Bot.runCommand("/admin_panel");

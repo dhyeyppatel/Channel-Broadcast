@@ -12,11 +12,10 @@ if (user.telegramid !== admin_id) return;
 if (!message && !request.chat_shared && !request.forward_from_chat) {
   Api.sendMessage({
     chat_id: user.telegramid,
-    text: "⏳ *Step 2: Target Channel*\nPlease select the Target Channel:",
-    parse_mode: "Markdown",
+    text: "Step 2: Target Channel\nPlease select the Target Channel:",
     reply_markup: {
       keyboard: [[{
-        text: "📢 Select Target Channel",
+        text: "Select Target Channel",
         request_chat: { request_id: 2, chat_is_channel: true }
       }]],
       resize_keyboard: true,
@@ -42,7 +41,7 @@ function nextStep() {
 
 if (shared) {
   User.setProperty("temp_rule_target", parseInt(shared.chat_id), "integer");
-  Api.sendMessage({ chat_id: user.telegramid, text: "✅ Target saved.", reply_markup: { remove_keyboard: true } });
+  Api.sendMessage({ chat_id: user.telegramid, text: "Target saved.", reply_markup: { remove_keyboard: true } });
   nextStep();
   return;
 }
@@ -50,17 +49,17 @@ if (shared) {
 let num = parseInt(message);
 if (!isNaN(num) && message && message.startsWith("-100")) {
   User.setProperty("temp_rule_target", num, "integer");
-  Api.sendMessage({ chat_id: user.telegramid, text: "✅ Target saved.", reply_markup: { remove_keyboard: true } });
+  Api.sendMessage({ chat_id: user.telegramid, text: "Target saved.", reply_markup: { remove_keyboard: true } });
   nextStep();
   return;
 }
 
 if (request.forward_from_chat) {
   User.setProperty("temp_rule_target", parseInt(request.forward_from_chat.id), "integer");
-  Api.sendMessage({ chat_id: user.telegramid, text: "✅ Target saved.", reply_markup: { remove_keyboard: true } });
+  Api.sendMessage({ chat_id: user.telegramid, text: "Target saved.", reply_markup: { remove_keyboard: true } });
   nextStep();
   return;
 }
 
-Api.sendMessage({ chat_id: user.telegramid, text: "❌ Invalid input. Try again.", reply_markup: { remove_keyboard: true } });
+Api.sendMessage({ chat_id: user.telegramid, text: "Invalid input. Try again.", reply_markup: { remove_keyboard: true } });
 Bot.runCommand("/admin_panel");
