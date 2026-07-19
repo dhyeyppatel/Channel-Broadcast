@@ -9,7 +9,7 @@ CMD*/
 let admin_id = Bot.getProperty("admin_id");
 if (user.telegramid !== admin_id) return;
 
-if (request.data) {
+if (!message && !request.chat_shared && !request.forward_from_chat) {
   // Use Bot.sendMessage as a fallback so we know the command executed
   Bot.sendMessage("*(Wait) Attempting to open Chat Picker...*\nIf a keyboard does not appear below, simply forward a message from your Source Channel instead.");
   
