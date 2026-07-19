@@ -10,10 +10,13 @@ let admin_id = Bot.getProperty("admin_id");
 if (user.telegramid !== admin_id) return;
 
 if (request.data) {
+  // Use Bot.sendMessage as a fallback so we know the command executed
+  Bot.sendMessage("*(Wait) Attempting to open Chat Picker...*\nIf a keyboard does not appear below, simply forward a message from your Source Channel instead.");
+  
   Api.sendMessage({
     chat_id: user.telegramid,
-    text: "Select your channel:",
-    reply_markup: {
+    text: "👇 Select your Source Channel below:",
+    reply_markup: JSON.stringify({
       keyboard: [[{
         text: "📢 Choose Channel",
         request_chat: {
@@ -23,7 +26,7 @@ if (request.data) {
       }]],
       resize_keyboard: true,
       one_time_keyboard: true
-    }
+    })
   });
   return;
 }
@@ -46,7 +49,7 @@ if (shared) {
     chat_id: user.telegramid,
     text: "✅ Source saved.\nID: `" + channel_id + "`",
     parse_mode: "Markdown",
-    reply_markup: { remove_keyboard: true }
+    reply_markup: JSON.stringify({ remove_keyboard: true })
   });
   
   Bot.runCommand("/add_rule_2");
@@ -56,7 +59,13 @@ if (shared) {
 if (request.forward_from_chat) {
   User.setProperty("temp_rule_source", parseInt(request.forward_from_chat.id), "integer");
   User.setProperty("temp_rule_start", parseInt(request.forward_from_message_id), "integer");
-  Bot.sendMessage("✅ Source and Start ID captured from forward.");
+  
+  Api.sendMessage({
+    chat_id: user.telegramid,
+    text: "✅ Source and Start ID captured from forward.",
+    reply_markup: JSON.stringify({ remove_keyboard: true })
+  });
+  
   Bot.runCommand("/add_rule_2");
   return;
 }

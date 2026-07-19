@@ -10,10 +10,12 @@ let admin_id = Bot.getProperty("admin_id");
 if (user.telegramid !== admin_id) return;
 
 if (!message && !request.chat_shared && !request.forward_from_chat) {
+  Bot.sendMessage("*(Wait) Attempting to open Chat Picker...*\nIf a keyboard does not appear below, simply forward a message from your Target Channel instead.");
+
   Api.sendMessage({
     chat_id: user.telegramid,
-    text: "Select your channel:",
-    reply_markup: {
+    text: "👇 Select your Target Channel below:",
+    reply_markup: JSON.stringify({
       keyboard: [[{
         text: "📢 Choose Channel",
         request_chat: {
@@ -23,7 +25,7 @@ if (!message && !request.chat_shared && !request.forward_from_chat) {
       }]],
       resize_keyboard: true,
       one_time_keyboard: true
-    }
+    })
   });
   return;
 }
@@ -46,7 +48,7 @@ if (shared) {
     chat_id: user.telegramid,
     text: "✅ Target saved.\nID: `" + channel_id + "`",
     parse_mode: "Markdown",
-    reply_markup: { remove_keyboard: true }
+    reply_markup: JSON.stringify({ remove_keyboard: true })
   });
   
   let temp_start = User.getProperty("temp_rule_start");
@@ -60,7 +62,12 @@ if (shared) {
 
 if (request.forward_from_chat) {
   User.setProperty("temp_rule_target", parseInt(request.forward_from_chat.id), "integer");
-  Bot.sendMessage("✅ Target saved.");
+  
+  Api.sendMessage({
+    chat_id: user.telegramid,
+    text: "✅ Target saved.",
+    reply_markup: JSON.stringify({ remove_keyboard: true })
+  });
   
   let temp_start = User.getProperty("temp_rule_start");
   if (temp_start) {
