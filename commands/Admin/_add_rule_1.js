@@ -4,38 +4,56 @@
   need_reply: true
   auto_retry_time: 
   folder: Admin
-
-  <<ANSWER
-⏳ *Step 1: Source Channel*
-Please forward any message from your **Source Channel** to me now. 
-*(I will automatically detect the Channel ID and Starting Message ID!)*
-  ANSWER
 CMD*/
 
 let admin_id = Bot.getProperty("admin_id");
 if (user.telegramid !== admin_id) return;
 
-if (request.forward_from_chat) {
-  let channel_id = request.forward_from_chat.id;
-  let message_id = request.forward_from_message_id;
-  
-  if (channel_id && message_id) {
-    User.setProperty("temp_rule_source", parseInt(channel_id), "integer");
-    User.setProperty("temp_rule_start", parseInt(message_id), "integer");
-    
-    Bot.sendMessage("✅ Source Channel ID (`" + channel_id + "`) and Starting Message ID (`" + message_id + "`) captured successfully!");
-    Bot.runCommand("/add_rule_2");
-    return;
-  }
+if (request.data) {
+  Api.sendMessage({
+    chat_id: user.telegramid,
+    text: "⏳ Step 1: Select your Source Channel:",
+    reply_markup: {
+      keyboard: [[{
+        text: "📢 Choose Source Channel",
+        request_chat: {
+          request_id: 1,
+          chat_is_channel: true
+        }
+      }]],
+      resize_keyboard: true,
+      one_time_keyboard: true
+    }
+  });
+  return;
 }
 
-let num = parseInt(message);
-if (!isNaN(num) && message && message.startsWith("-100")) {
-  User.setProperty("temp_rule_source", num, "integer");
-  Bot.sendMessage("✅ Source Channel saved. Note: Starting Message ID is not known, you must set it manually later.");
+let shared = request.chat_shared;
+if (!shared && request.message && request.message.chat_shared) {
+  shared = request.message.chat_shared;
+}
+
+if (shared) {
+  let channel_id = shared.chat_id;
+  User.setProperty("temp_rule_source", parseInt(channel_id), "integer");
+  
+  Api.sendMessage({
+    chat_id: user.telegramid,
+    text: "✅ Source saved.\nID: `" + channel_id + "`",
+    parse_mode: "Markdown",
+    reply_markup: { remove_keyboard: true }
+  });
+  
   Bot.runCommand("/add_rule_2");
   return;
 }
 
-Bot.sendMessage("❌ Invalid input. Please forward a message from your channel.");
-Bot.runCommand("/admin_panel");
+if (request.forward_from_chat) {
+  User.setProperty("temp_rule_source", parseInt(request.forward_from_chat.id), "integer");
+  User.setProperty("temp_rule_start", parseInt(request.forward_from_message_id), "integer");
+  Bot.sendMessage("✅ Source and Start ID captured from forward.");
+  Bot.runCommand("/add_rule_2");
+  return;
+}
+
+Bot.sendMessage("❌ Please use the button to select a channel.");
