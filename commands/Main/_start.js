@@ -18,24 +18,24 @@ CMD*/
 /start 
 Starts looped forwarding from storage channel to target channel
 */
-if (user.telegramid == 1123135015){
-let storage_channel = -1002743651819; // your storage channel (negative with -100 prefix)
-let target_channel = -1002352107567;  // replace with your target channel id
-let start_message_id = 1300;             // first message id
-let interval = 900;       // seconds (30 minutes)
 
-// save settings in user state
+let storage_channel = User.getProperty("storage_channel");
+let target_channel = User.getProperty("target_channel");
+let interval = User.getProperty("interval");
+let start_message_id = User.getProperty("current_message_id");
+
+if(!storage_channel || !target_channel || !interval || !start_message_id) {
+  Bot.sendMessage("⚠️ Bot is not configured. Please run:\n`/setup <storage_channel> <target_channel> <start_message_id> <interval_in_seconds>`");
+  return;
+}
+
+// start the loop
 User.setProperty("forward_loop", true, "boolean");
-User.setProperty("current_message_id", start_message_id, "integer");
-User.setProperty("storage_channel", storage_channel, "integer");
-User.setProperty("target_channel", target_channel, "integer");
-User.setProperty("interval", interval, "integer");
 
-Bot.sendMessage("✅ Auto forward started.\nEvery " + interval + " seconds a new message will be sent.");
+Bot.sendMessage("✅ Auto forward started.\nEvery " + interval + " seconds a new message will be sent from ID: " + start_message_id);
 
 // run first loop
 Bot.run({
   command: "/forwardNext",
   run_after: interval
 });
-}

@@ -1,10 +1,13 @@
 /*CMD
-  command: hmm
+  command: *
   help: 
   need_reply: false
   auto_retry_time: 
   folder: Auto-Delete
-  answer: .
+
+  <<ANSWER
+
+  ANSWER
 
   <<KEYBOARD
 
@@ -17,7 +20,7 @@ if (typeof request === "string") {
   try { request = JSON.parse(request.replace(/\n/g, "\\\n")); } catch (e) { return; }
 }
 
-let { channel_post: message } = request;
+let message = request.channel_post;
 if (!message) return;
 
 let chat_id = message.chat.id;
@@ -55,4 +58,3 @@ Bot.setProp(`log_${chat_id}_${message_id}`, {
   delay: `${amount}${unit}`,
   message_id: message_id
 }, 'json');
-

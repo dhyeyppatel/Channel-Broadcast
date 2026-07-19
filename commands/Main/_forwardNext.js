@@ -33,15 +33,8 @@ if(!User.getProperty("forward_loop")){
 Api.copyMessage({
   chat_id: target_channel,
   from_chat_id: storage_channel,
-  message_id: message_id
-});
-
-// increment message id
-User.setProperty("current_message_id", message_id + 1, "integer");
-
-// schedule next run
-Bot.run({
-  command: "/forwardNext",
-  run_after: interval
+  message_id: message_id,
+  on_result: "/on_forward_result",
+  on_error: "/on_forward_result"
 });
 
