@@ -5,16 +5,6 @@
   auto_retry_time: 
   folder: Admin
   aliases: Toggle Auto-Delete
-
-  <<ANSWER
-
-  ANSWER
-
-  <<KEYBOARD
-
-  KEYBOARD
-  aliases: 
-  group: 
 CMD*/
 
 let admin_id = Bot.getProperty("admin_id");
