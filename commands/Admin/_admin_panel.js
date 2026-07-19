@@ -4,16 +4,6 @@
   need_reply: false
   auto_retry_time: 
   folder: Admin
-
-  <<ANSWER
-
-  ANSWER
-
-  <<KEYBOARD
-
-  KEYBOARD
-  aliases: 
-  group: 
 CMD*/
 
 let admin_id = Bot.getProperty("admin_id");
@@ -44,5 +34,11 @@ let msg = `🎛 **Admin Panel**\n\n` +
   `📜 **Forwarding Rules:**\n${rulesText}` +
   `Use the buttons below to configure the bot.`;
 
-let keyboard = "Add Rule, Remove Rule\nToggle Auto-Delete, Set Time\nRun All, Stop All\nHelp";
-Bot.sendKeyboard(keyboard, msg);
+let buttons = [
+  [{ title: "➕ Add Rule", command: "/add_rule_1" }, { title: "🗑️ Remove Rule", command: "/remove_rule" }],
+  [{ title: "🗑️ Toggle Auto-Delete", command: "/toggle_autodelete" }, { title: "⏱️ Set Time", command: "/set_time" }],
+  [{ title: "▶️ Run All", command: "/run" }, { title: "⏹️ Stop All", command: "/stop" }],
+  [{ title: "❓ Help", command: "/help" }]
+];
+
+Bot.sendInlineKeyboard(buttons, msg);
