@@ -6,7 +6,8 @@
   folder: Admin
 
   <<ANSWER
-
+⏳ *Awaiting Response...*
+Please send the Starting Message ID (e.g. 150):
   ANSWER
 
   <<KEYBOARD
@@ -18,16 +19,6 @@ CMD*/
 
 let admin_id = Bot.getProperty("admin_id");
 if (user.telegramid !== admin_id) return;
-
-if (request.data) {
-  Api.answerCallbackQuery({
-    callback_query_id: request.id,
-    text: "Awaiting your response...",
-    show_alert: false
-  });
-  Bot.sendMessage("⏳ *Awaiting Response...*\nPlease send the Starting Message ID (e.g. 150):");
-  return;
-}
 
 let num = parseInt(message);
 if (!isNaN(num) && num > 0) {

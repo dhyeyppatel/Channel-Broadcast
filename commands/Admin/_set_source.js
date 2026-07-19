@@ -19,33 +19,6 @@ CMD*/
 let admin_id = Bot.getProperty("admin_id");
 if (user.telegramid !== admin_id) return;
 
-if (request.data) {
-  Api.answerCallbackQuery({
-    callback_query_id: request.id,
-    text: "Awaiting your response...",
-    show_alert: false
-  });
-  
-  Api.sendMessage({
-    chat_id: user.telegramid,
-    text: "⏳ *Awaiting Response...*\nPlease use the button below to select your Source Channel:",
-    parse_mode: "Markdown",
-    reply_markup: {
-      keyboard: [[{
-        text: "📢 Select Source Channel",
-        request_chat: {
-          request_id: 1,
-          chat_is_channel: true,
-          bot_administrator_rights: { can_post_messages: true }
-        }
-      }]],
-      resize_keyboard: true,
-      one_time_keyboard: true
-    }
-  });
-  return;
-}
-
 let shared = request.chat_shared;
 if (!shared && request.message && request.message.chat_shared) {
   shared = request.message.chat_shared;
@@ -80,6 +53,26 @@ if (request.forward_from_chat) {
     Bot.runCommand("/admin_panel");
     return;
   }
+}
+
+if (!message || message === "/set_source") {
+  Api.sendMessage({
+    chat_id: user.telegramid,
+    text: "⏳ *Awaiting Response...*\nPlease use the button below to select your Source Channel:",
+    parse_mode: "Markdown",
+    reply_markup: {
+      keyboard: [[{
+        text: "📢 Select Source Channel",
+        request_chat: {
+          request_id: 1,
+          chat_is_channel: true
+        }
+      }]],
+      resize_keyboard: true,
+      one_time_keyboard: true
+    }
+  });
+  return;
 }
 
 let num = parseInt(message);
