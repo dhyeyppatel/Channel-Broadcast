@@ -20,23 +20,75 @@ let admin_id = Bot.getProperty("admin_id");
 if (user.telegramid !== admin_id) return;
 
 if (request.data) {
-  Bot.sendMessage("Please forward a message from your Target Channel, or paste its ID (e.g. -100...):");
+  Api.answerCallbackQuery({
+    callback_query_id: request.id,
+    text: "Awaiting your response...",
+    show_alert: false
+  });
+  
+  Api.sendMessage({
+    chat_id: user.telegramid,
+    text: "⏳ *Awaiting Response...*\nPlease use the button below to select your Target Channel:",
+    parse_mode: "Markdown",
+    reply_markup: {
+      keyboard: [[{
+        text: "📢 Select Target Channel",
+        request_chat: {
+          request_id: 2,
+          chat_is_channel: true,
+          bot_administrator_rights: { can_post_messages: true }
+        }
+      }]],
+      resize_keyboard: true,
+      one_time_keyboard: true
+    }
+  });
+  return;
+}
+
+let shared = request.chat_shared;
+if (!shared && request.message && request.message.chat_shared) {
+  shared = request.message.chat_shared;
+}
+
+if (shared) {
+  let channel_id = shared.chat_id;
+  Bot.setProperty("target_channel", parseInt(channel_id), "integer");
+  
+  Api.sendMessage({
+    chat_id: user.telegramid,
+    text: "✅ Target Channel saved!\nID: `" + channel_id + "`",
+    reply_markup: { remove_keyboard: true }
+  });
+  Bot.runCommand("/admin_panel");
   return;
 }
 
 if (request.forward_from_chat) {
   Bot.setProperty("target_channel", parseInt(request.forward_from_chat.id), "integer");
-  Bot.sendMessage("✅ Target Channel saved!\nID: `" + request.forward_from_chat.id + "`");
+  Api.sendMessage({
+    chat_id: user.telegramid,
+    text: "✅ Target Channel saved!\nID: `" + request.forward_from_chat.id + "`",
+    reply_markup: { remove_keyboard: true }
+  });
   Bot.runCommand("/admin_panel");
   return;
 }
 
 let num = parseInt(message);
-if (!isNaN(num) && message.startsWith("-100")) {
+if (!isNaN(num) && message && message.startsWith("-100")) {
   Bot.setProperty("target_channel", num, "integer");
-  Bot.sendMessage("✅ Target Channel saved!\nID: `" + num + "`");
+  Api.sendMessage({
+    chat_id: user.telegramid,
+    text: "✅ Target Channel saved!\nID: `" + num + "`",
+    reply_markup: { remove_keyboard: true }
+  });
   Bot.runCommand("/admin_panel");
   return;
 }
 
-Bot.sendMessage("❌ Invalid input. Please send a valid channel ID.");
+Api.sendMessage({
+  chat_id: user.telegramid,
+  text: "❌ Invalid input. Please select a channel using the button.",
+  reply_markup: { remove_keyboard: true }
+});
